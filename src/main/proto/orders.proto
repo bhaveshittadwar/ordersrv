@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package ordersrv;
+
+// generate top‐level Java classes
+option java_multiple_files = true;
+option java_package        = "ordersrv";
+option java_outer_classname= "OrdersProto";
+
+message OrderReq {
+  string externalId = 1;
+  double amount     = 2;
+  string status     = 3;
+}
+
+message OrderResp {
+  string externalId = 1;
+  double amount     = 2;
+  string status     = 3;
+}
+
+service OrderService {
+  rpc Upsert(OrderReq) returns (OrderResp);
+}
