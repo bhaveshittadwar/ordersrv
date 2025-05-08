@@ -36,7 +36,7 @@ A small Spring Boot microservice that lets you create and update **orders** over
 ## Getting Started
 
 ~~~bash
-git clone git@github.com:<your-username>/ordersrv.git
+git clone git@github.com:bhaveshittadwar/ordersrv.git
 cd ordersrv
 mvn clean package
 ~~~
