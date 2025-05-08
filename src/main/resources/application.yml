@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/orders
+    username: user
+    password: pass
+  jpa:
+    hibernate:
+      ddl‑auto: update
+
+jwt:
+  secret: secret1212
+
+grpc:
+  security:
+    enabled: false
