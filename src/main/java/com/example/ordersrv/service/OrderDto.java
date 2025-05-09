@@ -7,8 +7,12 @@ public record OrderDto(String externalId,
                        BigDecimal amount,
                        String status) {
 
-    // Add these so your tests (and any legacy code) can still call getXxx()
+    public OrderDto(String externalId, double amount, String status) {
+        this(externalId, BigDecimal.valueOf(amount), status);
+    }
+
+    // These getXxx() methods let Jackson/TestRestTemplate treat this like a POJO.
     public String getExternalId() { return externalId; }
-    public BigDecimal getAmount()   { return amount;     }
-    public String getStatus()       { return status;     }
+    public BigDecimal getAmount() { return amount; }
+    public String getStatus()   { return status; }
 }
