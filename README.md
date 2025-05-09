@@ -1,6 +1,6 @@
 # Order Processor Service
 
-A small Spring Boot microservice that lets you create and update **orders** over **REST** and **gRPC**, storing them in PostgreSQL.
+A small Spring Boot microservice that lets you create and update **orders** over **REST** and **gRPC**, storing them in PostgreSQL.
 
 ---
 
@@ -11,23 +11,24 @@ A small Spring Boot microservice that lets you create and update **orders** over
 4. [Running](#running)  
 5. [API Usage](#api-usage)  
 6. [Tests](#tests)  
-7. [Project Structure](#project-structure)  
-8. [Glossary](#glossary)
+7. [CI/CD](#cicd)  
+8. [Project Structure](#project-structure)  
+9. [Glossary](#glossary)
 
 ---
 
 ## Project snapshot
-* **Language / Build** – Java 17 • Maven  
-* **Frameworks** – Spring Boot 3, Spring Data JPA, Spring-gRPC  
-* **I/O** – REST (JSON) + gRPC (Protobuf)  
-* **DB** – PostgreSQL 14  
-* **Tests** – JUnit 5 + Testcontainers (runs Postgres in Docker)
+* **Language / Build** – Java 17 • Maven  
+* **Frameworks** – Spring Boot 3, Spring Data JPA, Spring‑gRPC  
+* **I/O** – REST (JSON) + gRPC (Protobuf)  
+* **DB** – PostgreSQL 14  
+* **Tests** – JUnit 5 + Testcontainers (runs Postgres in Docker)
 
 ---
 
 ## Prerequisites
-* Java 17 (JDK)  
-* Maven 3.9+  
+* Java 17 (JDK)  
+* Maven 3.9+  
 * Docker (only for integration tests)  
 * PostgreSQL running locally or in Docker
 
@@ -74,7 +75,7 @@ curl -X POST http://localhost:8080/orders \
   -d '{"externalId":"ext100","amount":50.0,"status":"NEW"}'
 ~~~
 
-### gRPC example (needs [`grpcurl`](https://github.com/fullstorydev/grpcurl))
+### gRPC example (needs `grpcurl`)
 
 ~~~bash
 grpcurl -plaintext \
@@ -95,6 +96,15 @@ mvn clean test
 
 ---
 
+## CI/CD
+
+A CI/CD pipeline is configured using GitHub Actions in [`.github/workflows/ci.yml`](.github/workflows/ci.yml). On every push or pull request to `main`, it:
+1. Spins up a PostgreSQL service for integration tests.  
+2. Runs `mvn clean verify` to execute unit and integration tests.  
+3. Builds and pushes the Docker image to Docker Hub.
+
+---
+
 ## Project Structure
 
 ~~~text
@@ -103,20 +113,23 @@ src/
  │   ├─ java/com/example/ordersrv/      ← Java source
  │   ├─ proto/                          ← Protobuf (.proto) files
  │   └─ resources/                      ← application.yml etc.
- └─ test/
-     └─ java/com/example/ordersrv/      ← JUnit & Testcontainers
+ ├─ test/
+ │   └─ java/com/example/ordersrv/      ← JUnit & Testcontainers
+ └─ .github/
+     └─ workflows/ci.yml               ← CI/CD workflow
 ~~~
 
 ---
 
 ## Glossary
 
-| Term | Two-line explanation |
-|------|----------------------|
-| **Spring Boot** | Framework that bundles an embedded server and auto-configures everything so you can run the app with one command. |
-| **JPA** | Java Persistence API – maps Java objects to relational tables, letting you query with repository interfaces. |
-| **REST** | HTTP-based API style that typically exchanges JSON using verbs like GET, POST, PUT, DELETE. |
-| **gRPC** | High-performance binary Remote Procedure Call protocol (over HTTP/2) using Protobuf messages. |
-| **Protobuf** | “Protocol Buffers”: small, language-neutral binary message format used by gRPC. |
-| **Testcontainers** | Java library that launches real Docker containers during tests (here: a real Postgres). |
-| **HikariCP** | Fast JDBC connection-pool library Spring uses to manage DB connections efficiently. |
+| Term               | Two-line explanation                                                                                               |
+|--------------------|--------------------------------------------------------------------------------------------------------------------|
+| **Spring Boot**    | Framework that bundles an embedded server and auto‑configures everything so you can run the app with one command. |
+| **JPA**            | Java Persistence API – maps Java objects to relational tables, letting you query with repository interfaces.      |
+| **REST**           | HTTP‑based API style that typically exchanges JSON using verbs like GET, POST, PUT, DELETE.                       |
+| **gRPC**           | High‑performance binary Remote Procedure Call protocol (over HTTP/2) using Protobuf messages.                      |
+| **Protobuf**       | “Protocol Buffers”: small, language‑neutral binary message format used by gRPC.                                     |
+| **Testcontainers** | Java library that launches real Docker containers during tests (here: a real Postgres).                           |
+| **HikariCP**       | Fast JDBC connection‑pool library Spring uses to manage DB connections efficiently.                                |
+| **GitHub Actions** | CI/CD orchestration platform that runs workflows defined in `.github/workflows`.                                   |
