@@ -1,3 +1,4 @@
+# .github/workflows/ci.yml
 name: CI
 
 on:
@@ -52,4 +53,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: your-org/ordersrv:latest, your-org/ordersrv:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ordersrv:latest, ${{ secrets.DOCKERHUB_USERNAME }}/ordersrv:${{ github.sha }}
