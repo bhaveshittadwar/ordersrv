@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd="pg_isready -U user"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=5s
+        env:
+          POSTGRES_DB: orders
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: pass
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Cache Maven deps
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-m2-
+
+      - name: Build & Test
+        run: mvn clean verify -B
+
+      - name: Build Docker image
+        run: docker build -t your-org/ordersrv:${{ github.sha }} .
+
+      - name: Publish to Docker Hub
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: your-org/ordersrv:latest, your-org/ordersrv:${{ github.sha }}
