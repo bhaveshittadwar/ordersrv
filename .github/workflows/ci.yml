@@ -53,4 +53,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ordersrv:latest, ${{ secrets.DOCKERHUB_USERNAME }}/ordersrv:${{ github.sha }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/ordersrv:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/ordersrv:${{ github.sha }}
